@@ -1,1 +1,1 @@
-include ':app', ':comtokeyboard'
+include ':app', ':bluetoothtokeyboard'

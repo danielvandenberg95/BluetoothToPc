@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">BluetoothHIDTest</string>
+    <string name="app_name">Bluetooth2PC</string>
+    <string name="choose_a_bluetooth_device">Choose a Bluetooth device</string>
+    <string name="connect">Connect</string>
 </resources>

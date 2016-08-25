@@ -17,6 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".service.bluetoothdeviceselection.DeviceSelector"
+            android:theme="@style/DialogTheme"/>
+        <service android:name=".service.BluetoothService"/>
     </application>
 
 </manifest>

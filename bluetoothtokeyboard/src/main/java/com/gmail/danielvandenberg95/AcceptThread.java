@@ -1,7 +1,6 @@
 package com.gmail.danielvandenberg95;
 
 import java.awt.AWTException;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -97,19 +96,18 @@ public class AcceptThread extends Thread {
 
         public void run() {
             try {
-                DataOutputStream dout = new DataOutputStream(streamConnection.openOutputStream());
-                dout.write("Hello from the server!".getBytes());
-                dout.flush();
-                System.out.println("Test data sent");
                 InputStream din = (streamConnection.openInputStream());
                 while (running)
-
                 {
                     StringBuilder cmd = new StringBuilder();
                     System.out.println("Receiving...");
                     char tmpChar;
-                    while (((tmpChar = (char) din.read()) > 0) && (tmpChar != '\n')) {
+                    while (((tmpChar = (char) din.read()) > 0) && (tmpChar != '\n') && (tmpChar != '\4')) {
                         cmd.append(tmpChar);
+                    }
+                    if (tmpChar == '\4'){
+                        System.out.println("Connection closed.");
+                        return;
                     }
                     String command = cmd.toString();
                     System.out.println("Received " + command);

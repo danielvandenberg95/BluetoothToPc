@@ -1,4 +1,4 @@
-package com.gmail.dvandenberg95.bluetoothhidtest;
+package com.gmail.dvandenberg95.bluetoothhidtest.service;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -13,14 +13,10 @@ import java.util.UUID;
  */
 public class BluetoothConnection extends Thread{
     private final BluetoothSocket rfcommSocketToServiceRecord;
-    private final BluetoothDevice selectedBluetoothDevice;
-    private MainActivity mainActivity;
     private Runnable onConnected;
 
-    public BluetoothConnection(MainActivity mainActivity, BluetoothDevice selectedBluetoothDevice) {
-        this.mainActivity = mainActivity;
-        this.selectedBluetoothDevice = selectedBluetoothDevice;
-        UUID uuid = (MainActivity.MY_UUID); //Standard SerialPortService ID
+    public BluetoothConnection(BluetoothDevice selectedBluetoothDevice) {
+        UUID uuid = (BluetoothStringSender.MY_UUID); //Standard SerialPortService ID
         BluetoothSocket tmp = null;
         try {
             tmp = selectedBluetoothDevice.createRfcommSocketToServiceRecord(uuid);
@@ -35,10 +31,8 @@ public class BluetoothConnection extends Thread{
             rfcommSocketToServiceRecord.connect();
         } catch (IOException e) {
             e.printStackTrace();
-            mainActivity.error(e.getLocalizedMessage());
             return;
         }
-        mainActivity.error("Connected successfully");
         if (onConnected != null) {
             onConnected.run();
         }
@@ -67,6 +61,15 @@ public class BluetoothConnection extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void close(){
+        try {
+            getOutputStream().write('\4');
+            rfcommSocketToServiceRecord.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
