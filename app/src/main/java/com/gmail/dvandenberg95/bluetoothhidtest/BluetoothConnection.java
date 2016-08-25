@@ -20,7 +20,7 @@ public class BluetoothConnection extends Thread{
     public BluetoothConnection(MainActivity mainActivity, BluetoothDevice selectedBluetoothDevice) {
         this.mainActivity = mainActivity;
         this.selectedBluetoothDevice = selectedBluetoothDevice;
-        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //Standard SerialPortService ID
+        UUID uuid = (MainActivity.MY_UUID); //Standard SerialPortService ID
         BluetoothSocket tmp = null;
         try {
             tmp = selectedBluetoothDevice.createRfcommSocketToServiceRecord(uuid);

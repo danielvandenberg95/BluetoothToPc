@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    public static final UUID MY_UUID = UUID.fromString("57669b2f-d0d6-4df3-9447-fbc2381cba19");//UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private DeviceSpinnerItemSelectedListener deviceSpinnerItemSelectedListener = new DeviceSpinnerItemSelectedListener();
     private BondedDeviceAdapter bondedDeviceAdapter;
     private BluetoothDevice selectedBluetoothDevice = null;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendTestData(View view) {
         try {
-            bluetoothConnection.getOutputStream().write("Hello world!".getBytes());
+            bluetoothConnection.getOutputStream().write("Hello world!\n".getBytes());
             error("Test data sent");
         } catch (IOException e) {
             e.printStackTrace();

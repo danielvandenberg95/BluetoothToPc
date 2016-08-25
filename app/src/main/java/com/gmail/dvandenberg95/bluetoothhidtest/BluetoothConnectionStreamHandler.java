@@ -4,7 +4,6 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Created by Daniel on 23/8/2016.
@@ -23,7 +22,7 @@ public class BluetoothConnectionStreamHandler implements Runnable {
     @Override
     public void run() {
         final InputStream inputStream = bluetoothConnection.getInputStream();
-        final OutputStream outputStream = bluetoothConnection.getOutputStream();
+        //final OutputStream outputStream = bluetoothConnection.getOutputStream();
         while (!mainActivity.isDestroyed()) {
             try {
                 final int read = inputStream.read();
@@ -39,8 +38,8 @@ public class BluetoothConnectionStreamHandler implements Runnable {
                         textView.setText(stringBuilder);
                     }
                 });
-                outputStream.write(read);
-                outputStream.flush();
+                /*outputStream.write(read);
+                outputStream.flush();*/
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
