@@ -1,11 +1,12 @@
 package com.gmail.danielvandenberg95;
 
 import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.bluetooth.DiscoveryAgent;
 import javax.bluetooth.LocalDevice;
@@ -27,18 +28,20 @@ public class AcceptThread extends Thread {
     LocalDevice local = null;
     StreamConnectionNotifier server = null;
     StreamConnection conn = null;
-    final Robot robot;
+    final Keyboard keyboard;
+    boolean running = true;
+    private Set<WeakReference<ConnectionHandler>> connectionHandlers = new HashSet<>();
 
     public AcceptThread() {
-        Robot tmp = null;
+        Keyboard tmp = null;
         try {
-            tmp = new Robot();
+            tmp = new Keyboard();
         } catch (AWTException e) {
             e.printStackTrace();
         }
-        robot = tmp;
+        keyboard = tmp;
 
-        if (robot == null){
+        if (keyboard == null) {
             throw new RuntimeException("Could not take control of the keyboard.");
         }
     }
@@ -53,25 +56,11 @@ public class AcceptThread extends Thread {
             System.out.println("Start advertising service...");
             server = (StreamConnectionNotifier) Connector.open(url);
             System.out.println("Waiting for incoming connection...");
-            conn = server.acceptAndOpen();
-            System.out.println("Client Connected...");
-            DataOutputStream dout = new DataOutputStream(conn.openOutputStream());
-            dout.write("Hello from the server!".getBytes());
-            dout.flush();
-            System.out.println("Test data sent");
-            InputStream din = (conn.openInputStream());
-            while (true)
-
-            {
-                StringBuilder cmd = new StringBuilder();
-                System.out.println("Receiving...");
-                char tmpChar;
-                while (((tmpChar = (char) din.read()) > 0) && (tmpChar != '\n')) {
-                    cmd.append(tmpChar);
-                }
-                String command = cmd.toString();
-                System.out.println("Received " + command);
-                type(command);
+            while (running) {
+                final ConnectionHandler connectionHandler = new ConnectionHandler(server.acceptAndOpen());
+                System.out.println("Client Connected...");
+                connectionHandler.start();
+                connectionHandlers.add(new WeakReference<>(connectionHandler));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,22 +69,55 @@ public class AcceptThread extends Thread {
 
     }
 
-    public void type(CharSequence cs){
-        for(int i=0;i<cs.length();i++){
-            type(cs.charAt(i));
+    public void exit() {
+        running = false;
+        interrupt();
+        if (server != null) {
+            try {
+                server.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        for (WeakReference<ConnectionHandler> connectionHandler : connectionHandlers){
+            final ConnectionHandler handler = connectionHandler.get();
+            if (handler == null){
+                continue;
+            }
+            handler.interrupt();
         }
     }
 
-    public void type(char c){
-        robot.keyPress(KeyEvent.VK_ALT);
-        robot.keyPress(KeyEvent.VK_NUMPAD0);
-        robot.keyRelease(KeyEvent.VK_NUMPAD0);
-        String altCode=Integer.toString(c);
-        for(int i=0;i<altCode.length();i++){
-            c=(char)(altCode.charAt(i)+'0');
-            robot.keyPress(c);
-            robot.keyRelease(c);
+    private class ConnectionHandler extends Thread {
+        private final StreamConnection streamConnection;
+
+        public ConnectionHandler(StreamConnection streamConnection) {
+            this.streamConnection = streamConnection;
         }
-        robot.keyRelease(KeyEvent.VK_ALT);
+
+        public void run() {
+            try {
+                DataOutputStream dout = new DataOutputStream(streamConnection.openOutputStream());
+                dout.write("Hello from the server!".getBytes());
+                dout.flush();
+                System.out.println("Test data sent");
+                InputStream din = (streamConnection.openInputStream());
+                while (running)
+
+                {
+                    StringBuilder cmd = new StringBuilder();
+                    System.out.println("Receiving...");
+                    char tmpChar;
+                    while (((tmpChar = (char) din.read()) > 0) && (tmpChar != '\n')) {
+                        cmd.append(tmpChar);
+                    }
+                    String command = cmd.toString();
+                    System.out.println("Received " + command);
+                    keyboard.type(command);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
