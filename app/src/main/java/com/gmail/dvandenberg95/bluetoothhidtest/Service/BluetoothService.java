@@ -19,6 +19,11 @@ public class BluetoothService extends Service {
         return BINDER;
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     private void sendString(final String string){
         bluetoothStringSender.sendString(string, this);
     }

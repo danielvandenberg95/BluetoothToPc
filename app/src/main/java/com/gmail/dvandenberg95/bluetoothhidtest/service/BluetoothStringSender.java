@@ -33,6 +33,11 @@ public class BluetoothStringSender {
                     return;
                 }
                 try {
+                    Thread.sleep(250);//For stability, seems to be required in order to make sure the sent data actually arrives.
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
                     bluetoothConnection.getOutputStream().write((string+'\n').getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();

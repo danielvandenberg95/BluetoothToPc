@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.gmail.dvandenberg95.bluetoothhidtest">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -18,8 +19,21 @@
             </intent-filter>
         </activity>
         <activity android:name=".service.bluetoothdeviceselection.DeviceSelector"
-            android:theme="@style/DialogTheme"/>
-        <service android:name=".service.BluetoothService"/>
+            android:theme="@style/DialogTheme"
+            android:excludeFromRecents="true"/>
+        <service android:name=".service.BluetoothService"
+            android:exported="true"
+            tools:ignore="ExportedService">
+        </service>
+        <activity android:name=".ShareActivity"
+            android:theme="@style/Invisible"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

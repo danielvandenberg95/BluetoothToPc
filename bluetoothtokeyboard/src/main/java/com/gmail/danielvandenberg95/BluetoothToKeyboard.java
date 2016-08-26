@@ -1,6 +1,6 @@
 package com.gmail.danielvandenberg95;
 
-public class ComToKeyboard {
+public class BluetoothToKeyboard {
     public static void main(String[] args) {
         System.out.println("test");
         final AcceptThread acceptThread = new AcceptThread();

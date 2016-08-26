@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.bluetooth.DiscoveryAgent;
 import javax.bluetooth.LocalDevice;
@@ -89,15 +91,36 @@ public class AcceptThread extends Thread {
 
     private class ConnectionHandler extends Thread {
         private final StreamConnection streamConnection;
+        private final Timer timer = new Timer();
+        private boolean stopping = false;
+        private InputStream din;
 
         public ConnectionHandler(StreamConnection streamConnection) {
             this.streamConnection = streamConnection;
+            try {
+                din = (streamConnection.openInputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+                stopping = true;
+            }
+            reschedule();
+            notifyConnectionSuccessful();
+        }
+
+        private void notifyConnectionSuccessful() {/*
+            try {
+                final DataOutputStream dataOutputStream = streamConnection.openDataOutputStream();
+                dataOutputStream.writeUTF("OK");
+                dataOutputStream.flush();
+                dataOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
         }
 
         public void run() {
             try {
-                InputStream din = (streamConnection.openInputStream());
-                while (running)
+                while (running && !stopping)
                 {
                     StringBuilder cmd = new StringBuilder();
                     System.out.println("Receiving...");
@@ -111,11 +134,28 @@ public class AcceptThread extends Thread {
                     }
                     String command = cmd.toString();
                     System.out.println("Received " + command);
+                    reschedule();
                     keyboard.type(command);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        private void reschedule() {
+            timer.purge();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("Stopping connection...");
+                    stopping = true;
+                    try {
+                        din.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            },10000);
         }
     }
 }
