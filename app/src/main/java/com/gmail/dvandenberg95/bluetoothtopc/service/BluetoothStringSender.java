@@ -1,9 +1,9 @@
-package com.gmail.dvandenberg95.bluetoothhidtest.service;
+package com.gmail.dvandenberg95.bluetoothtopc.service;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 
-import com.gmail.dvandenberg95.bluetoothhidtest.service.bluetoothdeviceselection.BluetoothDeviceSelecter;
+import com.gmail.dvandenberg95.bluetoothtopc.service.bluetoothdeviceselection.BluetoothDeviceSelector;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -11,7 +11,7 @@ import java.util.UUID;
 /**
  * Created by Daniel on 25/8/2016.
  */
-public class BluetoothStringSender {
+class BluetoothStringSender {
     public static final UUID MY_UUID = UUID.fromString("57669b2f-d0d6-4df3-9447-fbc2381cba19");
 
     private BluetoothDevice selectedBluetoothDevice = null;
@@ -47,11 +47,11 @@ public class BluetoothStringSender {
         }).start();
     }
 
-    public void scan(Context context) {
-        selectedBluetoothDevice = new BluetoothDeviceSelecter().getBluetoothDevice(context);
+    private void scan(Context context) {
+        selectedBluetoothDevice = new BluetoothDeviceSelector().getBluetoothDevice(context);
     }
 
-    public void connect() {
+    private void connect() {
         if (selectedBluetoothDevice == null) {
             return;
         }

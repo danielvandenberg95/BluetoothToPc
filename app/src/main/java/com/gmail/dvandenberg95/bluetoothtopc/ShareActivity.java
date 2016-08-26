@@ -1,32 +1,39 @@
-package com.gmail.dvandenberg95.bluetoothhidtest;
+package com.gmail.dvandenberg95.bluetoothtopc;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
+import android.widget.Toast;
 
-import com.gmail.dvandenberg95.bluetoothhidtest.service.BluetoothService;
+import com.gmail.dvandenberg95.bluetoothtopc.service.BluetoothService;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by Daniel on 26/8/2016.
+ */
+public class ShareActivity extends Activity {
+    private String textToSend = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        textToSend = getIntent().getStringExtra(Intent.EXTRA_TEXT);
     }
 
     private BluetoothService.BluetoothServiceBinder myServiceBinder;
-    public ServiceConnection myConnection = new ServiceConnection() {
+    private final ServiceConnection myConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, IBinder binder) {
             myServiceBinder = ((BluetoothService.BluetoothServiceBinder) binder);
             Log.d("ServiceConnection", "connected");
+            myServiceBinder.sendString(textToSend);
+            textToSend = null;
+            Toast.makeText(ShareActivity.this,"Sending text via Bluetooth",Toast.LENGTH_LONG).show();
+            finish();
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -55,22 +62,5 @@ public class MainActivity extends AppCompatActivity {
             myServiceBinder = null;
         }
         super.onPause();
-    }
-
-    public void error(final String s) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                new AlertDialog.Builder(MainActivity.this).setTitle(s).show();
-            }
-        });
-    }
-
-    public void serviceTest(View view) {
-        if (myServiceBinder == null) {
-            error("Service not bound…");
-            return;
-        }
-        myServiceBinder.sendString("Test string");
     }
 }

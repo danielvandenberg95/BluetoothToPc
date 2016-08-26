@@ -2,4 +2,5 @@
     <string name="app_name">Bluetooth2PC</string>
     <string name="choose_a_bluetooth_device">Choose a Bluetooth device</string>
     <string name="connect">Connect</string>
+    <string name="service_test">Service test</string>
 </resources>

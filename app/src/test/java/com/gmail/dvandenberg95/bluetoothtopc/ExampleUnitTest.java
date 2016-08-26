@@ -1,4 +1,4 @@
-package com.gmail.dvandenberg95.bluetoothhidtest;
+package com.gmail.dvandenberg95.bluetoothtopc;
 
 import org.junit.Test;
 

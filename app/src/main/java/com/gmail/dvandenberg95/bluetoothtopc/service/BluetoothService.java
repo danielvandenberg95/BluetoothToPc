@@ -1,4 +1,4 @@
-package com.gmail.dvandenberg95.bluetoothhidtest.service;
+package com.gmail.dvandenberg95.bluetoothtopc.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -17,11 +17,6 @@ public class BluetoothService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return BINDER;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
     }
 
     private void sendString(final String string){

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <entry_points version="2.0" />
+    <entry_points version="2.0">
+      <entry_point TYPE="method" FQNAME="com.gmail.dvandenberg95.bluetoothhidtest.service.bluetoothdeviceselection.DeviceSelector void connect(android.view.View view)" />
+      <entry_point TYPE="method" FQNAME="com.gmail.dvandenberg95.bluetoothhidtest.MainActivity void serviceTest(android.view.View view)" />
+      <entry_point TYPE="method" FQNAME="com.gmail.dvandenberg95.bluetoothhidtest.ApplicationTest ApplicationTest()" />
+    </entry_points>
   </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />

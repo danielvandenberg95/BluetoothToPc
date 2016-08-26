@@ -63,16 +63,12 @@ import static java.awt.event.KeyEvent.VK_X;
 import static java.awt.event.KeyEvent.VK_Y;
 import static java.awt.event.KeyEvent.VK_Z;
 
-public class Keyboard { // http://stackoverflow.com/a/39141846/4330555
+class Keyboard { // http://stackoverflow.com/a/39141846/4330555
 
     private Robot robot;
 
     public Keyboard() throws AWTException {
         this.robot = new Robot();
-    }
-
-    public Keyboard(Robot robot) {
-        this.robot = robot;
     }
 
     public void type(CharSequence characters) {
@@ -96,7 +92,7 @@ public class Keyboard { // http://stackoverflow.com/a/39141846/4330555
         }
     }
 
-    public void type(char character) {
+    private void type(char character) {
         switch (character) {
             case 'a':
                 doType(VK_A);

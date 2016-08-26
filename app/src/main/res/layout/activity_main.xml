@@ -7,12 +7,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.gmail.dvandenberg95.bluetoothhidtest.MainActivity">
+    tools:context="com.gmail.dvandenberg95.bluetoothtopc.MainActivity">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Service test"
+        android:text="@string/service_test"
         android:id="@+id/button4"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"

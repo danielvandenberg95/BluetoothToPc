@@ -19,19 +19,17 @@ import javax.microedition.io.StreamConnectionNotifier;
 /**
  * Created by Daniel on 24/8/2016.
  */
-public class AcceptThread extends Thread {
-    public final UUID uuid = new UUID(                              //the uid of the service, it has to be unique,
+class AcceptThread extends Thread {
+    private final UUID uuid = new UUID(                              //the uid of the service, it has to be unique,
             "57669b2fd0d64df39447fbc2381cba19", false); //it can be generated randomly
-    public final String name = "Echo Server";                       //the name of the service
-    public final String url = "btspp://localhost:" + uuid         //the service url
+    private final String name = "Echo Server";                       //the name of the service
+    private final String url = "btspp://localhost:" + uuid         //the service url
             + ";name=" + name
             + ";authenticate=true;encrypt=true;";
-    LocalDevice local = null;
-    StreamConnectionNotifier server = null;
-    StreamConnection conn = null;
-    final Keyboard keyboard;
-    boolean running = true;
-    private Set<WeakReference<ConnectionHandler>> connectionHandlers = new HashSet<>();
+    private StreamConnectionNotifier server = null;
+    private final Keyboard keyboard;
+    private boolean running = true;
+    private final Set<WeakReference<ConnectionHandler>> connectionHandlers = new HashSet<>();
 
     public AcceptThread() {
         Keyboard tmp = null;
@@ -52,7 +50,7 @@ public class AcceptThread extends Thread {
         // The local server socket
         System.out.println("Setting device to be discoverable...");
         try {
-            local = LocalDevice.getLocalDevice();
+            LocalDevice local = LocalDevice.getLocalDevice();
             local.setDiscoverable(DiscoveryAgent.GIAC);
             System.out.println("Start advertising service...");
             server = (StreamConnectionNotifier) Connector.open(url);
@@ -90,13 +88,11 @@ public class AcceptThread extends Thread {
     }
 
     private class ConnectionHandler extends Thread {
-        private final StreamConnection streamConnection;
         private final Timer timer = new Timer();
         private boolean stopping = false;
         private InputStream din;
 
         public ConnectionHandler(StreamConnection streamConnection) {
-            this.streamConnection = streamConnection;
             try {
                 din = (streamConnection.openInputStream());
             } catch (IOException e) {
@@ -104,18 +100,6 @@ public class AcceptThread extends Thread {
                 stopping = true;
             }
             reschedule();
-            notifyConnectionSuccessful();
-        }
-
-        private void notifyConnectionSuccessful() {/*
-            try {
-                final DataOutputStream dataOutputStream = streamConnection.openDataOutputStream();
-                dataOutputStream.writeUTF("OK");
-                dataOutputStream.flush();
-                dataOutputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
         }
 
         public void run() {

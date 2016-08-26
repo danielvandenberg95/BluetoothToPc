@@ -1,4 +1,4 @@
-package com.gmail.dvandenberg95.bluetoothhidtest.service.bluetoothdeviceselection;
+package com.gmail.dvandenberg95.bluetoothtopc.service.bluetoothdeviceselection;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.content.Intent;
 /**
  * Created by Daniel on 25/8/2016.
  */
-public class BluetoothDeviceSelecter {
+public class BluetoothDeviceSelector {
 
     private final Object synchronisation = new Object();
 

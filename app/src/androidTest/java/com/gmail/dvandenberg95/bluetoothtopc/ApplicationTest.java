@@ -1,4 +1,4 @@
-package com.gmail.dvandenberg95.bluetoothhidtest;
+package com.gmail.dvandenberg95.bluetoothtopc;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -1,4 +1,4 @@
-package com.gmail.dvandenberg95.bluetoothhidtest.service.bluetoothdeviceselection;
+package com.gmail.dvandenberg95.bluetoothtopc.service.bluetoothdeviceselection;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.gmail.dvandenberg95.bluetoothhidtest.R;
+import com.gmail.dvandenberg95.bluetoothtopc.R;
 
 import java.util.Set;
 
@@ -24,7 +24,7 @@ public class DeviceSelector extends Activity {
     private static final int RESULT_CODE_ENABLE_BLUETOOTH = 4397553;
 
 
-    private DeviceSpinnerItemSelectedListener deviceSpinnerItemSelectedListener = new DeviceSpinnerItemSelectedListener();
+    private final DeviceSpinnerItemSelectedListener deviceSpinnerItemSelectedListener = new DeviceSpinnerItemSelectedListener();
     private BondedDeviceAdapter bondedDeviceAdapter;
     private boolean askedToEnable = false;
 
@@ -34,8 +34,8 @@ public class DeviceSelector extends Activity {
     }
 
     private void notifyContainer() {
-        synchronized (BluetoothDeviceSelecter.BluetoothDeviceContainer.waitable) {
-            BluetoothDeviceSelecter.BluetoothDeviceContainer.waitable.notifyAll();
+        synchronized (BluetoothDeviceSelector.BluetoothDeviceContainer.waitable) {
+            BluetoothDeviceSelector.BluetoothDeviceContainer.waitable.notifyAll();
         }
     }
 
@@ -65,12 +65,12 @@ public class DeviceSelector extends Activity {
     private class DeviceSpinnerItemSelectedListener implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            BluetoothDeviceSelecter.BluetoothDeviceContainer.bluetoothDevice = bondedDeviceAdapter.getItem(i);
+            BluetoothDeviceSelector.BluetoothDeviceContainer.bluetoothDevice = bondedDeviceAdapter.getItem(i);
         }
 
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) {
-            BluetoothDeviceSelecter.BluetoothDeviceContainer.bluetoothDevice = null;
+            BluetoothDeviceSelector.BluetoothDeviceContainer.bluetoothDevice = null;
         }
     }
 

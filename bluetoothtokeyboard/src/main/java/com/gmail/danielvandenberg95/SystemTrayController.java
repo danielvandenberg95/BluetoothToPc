@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
 /**
  * Created by Daniel on 25/8/2016.
  */
-public class SystemTrayController extends Thread {
+class SystemTrayController extends Thread {
     private static final String ICON_STRING = "P";
     private final AcceptThread acceptThread;
 
@@ -31,7 +31,7 @@ public class SystemTrayController extends Thread {
         final SystemTray systemTray = SystemTray.getSystemTray();
 
         final PopupMenu popup = new PopupMenu();
-        final TrayIcon trayIcon = new TrayIcon(createImage("lock-symbol.png", "tray icon"));
+        final TrayIcon trayIcon = new TrayIcon(createImage());
 
         popup.add("Pass");
         MenuItem menuItem = new MenuItem("Quit");
@@ -52,15 +52,7 @@ public class SystemTrayController extends Thread {
         }
     }
 
-    protected static Image createImage(String path, String description) {
-        /*URL imageURL = SystemTrayController.class.getResource(path);
-
-        if (imageURL == null) {
-            System.err.println("Resource not found: " + path);
-            return null;
-        } else {
-            return (new ImageIcon(imageURL, description)).getImage();
-        }*/
+    private static Image createImage() {
         BufferedImage img = new BufferedImage(16, 16,
                 BufferedImage.TYPE_INT_RGB);
         final Graphics2D graphics = img.createGraphics();
