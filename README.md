@@ -12,5 +12,6 @@ BluetoothToKeyboard allows you to let your phone send any text to your PC. The P
     - These resources can be found in the resources subdirectory. The use of the current icon is unlicenced.
  - Settings activity instead of the current test-screen
  - Improved readme and descriptions. The descriptions in this readme will be used in the play store too.
+
 ## Reccomendations
 This app was originally made for use with the [Password Store](https://github.com/zeapo/Android-Password-Store) app. The original idea was to be able to log in on a PC using a password saved on one's phone. Using this application for that is highly reccomended.
