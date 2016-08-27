@@ -1,3 +1,27 @@
+/*
+ * Copyright (c) 2016. Daniël van den Berg.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * The software is provided "as is", without warranty of any kind, express
+ * or implied, including but not limited to the warranties of
+ * merchantability, fitness for a particular purpose, title and
+ * non-infringement. In no event shall the copyright holders or anyone
+ * distributing the software be liable for any damages or other liability,
+ * whether in contract, tort or otherwise, arising from, out of or in
+ * connection with the software or the use or other dealings in the
+ * software.
+ */
+
 package com.gmail.danielvandenberg95;
 
 import java.awt.AWTException;
@@ -21,17 +45,17 @@ import javax.microedition.io.StreamConnectionNotifier;
  * Created by Daniel on 24/8/2016.
  */
 class AcceptThread extends Thread {
+    private final static Random random = new Random();
     private final UUID uuid = new UUID(                              //the uid of the service, it has to be unique,
             "57669b2fd0d64df39447fbc2381cba19", false); //it can be generated randomly
     private final String name = "Echo Server";                       //the name of the service
     private final String url = "btspp://localhost:" + uuid         //the service url
             + ";name=" + name
             + ";authenticate=true;encrypt=true;";
-    private StreamConnectionNotifier server = null;
     private final Keyboard keyboard;
-    private boolean running = true;
-    private final static Random random = new Random();
     private final Set<WeakReference<ConnectionHandler>> connectionHandlers = new HashSet<>();
+    private StreamConnectionNotifier server = null;
+    private boolean running = true;
 
     public AcceptThread() {
         Keyboard tmp = null;
@@ -91,9 +115,9 @@ class AcceptThread extends Thread {
 
     private class ConnectionHandler extends Thread {
         private final Timer timer = new Timer();
+        private final int connectionId;
         private boolean stopping = false;
         private InputStream din;
-        private final int connectionId;
         private TimerTask timerTask;
 
         public ConnectionHandler(StreamConnection streamConnection) {

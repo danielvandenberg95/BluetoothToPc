@@ -1,3 +1,27 @@
+/*
+ * Copyright (c) 2016. Daniël van den Berg.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * The software is provided "as is", without warranty of any kind, express
+ * or implied, including but not limited to the warranties of
+ * merchantability, fitness for a particular purpose, title and
+ * non-infringement. In no event shall the copyright holders or anyone
+ * distributing the software be liable for any damages or other liability,
+ * whether in contract, tort or otherwise, arising from, out of or in
+ * connection with the software or the use or other dealings in the
+ * software.
+ */
+
 package com.gmail.danielvandenberg95;
 
 import java.awt.AWTException;
@@ -21,6 +45,20 @@ class SystemTrayController extends Thread {
 
     public SystemTrayController(AcceptThread acceptThread) {
         this.acceptThread = acceptThread;
+    }
+
+    private static Image createImage() {
+        BufferedImage img = new BufferedImage(16, 16,
+                BufferedImage.TYPE_INT_RGB);
+        final Graphics2D graphics = img.createGraphics();
+        graphics.setColor(Color.GREEN);
+        graphics.fillRect(0, 0, img.getWidth(), img.getHeight());
+        graphics.setColor(Color.BLACK);
+        final FontMetrics fontMetrics = graphics.getFontMetrics();
+        final Rectangle2D stringBounds = fontMetrics.getStringBounds(ICON_STRING, graphics);
+        graphics.drawString(ICON_STRING, (int) (img.getWidth() - stringBounds.getWidth()) / 2, (int) (img.getHeight() - stringBounds.getHeight()) / 2 + fontMetrics.getAscent());
+        graphics.drawImage(img, null, 0, 0);
+        return img;
     }
 
     @Override
@@ -50,19 +88,5 @@ class SystemTrayController extends Thread {
         } catch (AWTException e) {
             System.out.println("TrayIcon could not be added.");
         }
-    }
-
-    private static Image createImage() {
-        BufferedImage img = new BufferedImage(16, 16,
-                BufferedImage.TYPE_INT_RGB);
-        final Graphics2D graphics = img.createGraphics();
-        graphics.setColor(Color.GREEN);
-        graphics.fillRect(0,0,img.getWidth(),img.getHeight());
-        graphics.setColor(Color.BLACK);
-        final FontMetrics fontMetrics = graphics.getFontMetrics();
-        final Rectangle2D stringBounds = fontMetrics.getStringBounds(ICON_STRING, graphics);
-        graphics.drawString(ICON_STRING,(int)(img.getWidth()-stringBounds.getWidth())/2,(int)(img.getHeight()-stringBounds.getHeight())/2 + fontMetrics.getAscent());
-        graphics.drawImage(img,null,0,0);
-        return img;
     }
 }

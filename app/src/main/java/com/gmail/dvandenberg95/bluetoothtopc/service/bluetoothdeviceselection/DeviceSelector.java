@@ -1,3 +1,27 @@
+/*
+ * Copyright (c) 2016. Daniël van den Berg.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * The software is provided "as is", without warranty of any kind, express
+ * or implied, including but not limited to the warranties of
+ * merchantability, fitness for a particular purpose, title and
+ * non-infringement. In no event shall the copyright holders or anyone
+ * distributing the software be liable for any damages or other liability,
+ * whether in contract, tort or otherwise, arising from, out of or in
+ * connection with the software or the use or other dealings in the
+ * software.
+ */
+
 package com.gmail.dvandenberg95.bluetoothtopc.service.bluetoothdeviceselection;
 
 import android.app.Activity;
@@ -39,11 +63,61 @@ public class DeviceSelector extends Activity {
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.service_select_device);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        run();
+    }
+
+    private void run() {
+        final BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if (!defaultAdapter.isEnabled()) {
+            if (askedToEnable) {
+                notifyContainer();
+                return;
+            }
+            askedToEnable = true;
+            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBluetooth, RESULT_CODE_ENABLE_BLUETOOTH);
+        }
+
+        final Set<BluetoothDevice> bondedDevices = defaultAdapter.getBondedDevices();
+        Spinner deviceSpinner = (Spinner) findViewById(R.id.deviceSpinner);
+        BluetoothDevice[] bondedDeviceArray = new BluetoothDevice[0];
+        bondedDeviceArray = bondedDevices.toArray(bondedDeviceArray);
+        bondedDeviceAdapter = new BondedDeviceAdapter(this, bondedDeviceArray);
+        deviceSpinner.setAdapter(bondedDeviceAdapter);
+        deviceSpinner.setOnItemSelectedListener(deviceSpinnerItemSelectedListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        notifyContainer();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RESULT_CODE_ENABLE_BLUETOOTH) {
+            run();
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private class BondedDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
         private final BluetoothDevice[] bondedDevices;
 
         public BondedDeviceAdapter(Context context, BluetoothDevice[] bondedDevices) {
-            super(context,android.R.layout.simple_list_item_1,bondedDevices);
+            super(context, android.R.layout.simple_list_item_1, bondedDevices);
             this.bondedDevices = bondedDevices;
         }
 
@@ -72,56 +146,5 @@ public class DeviceSelector extends Activity {
         public void onNothingSelected(AdapterView<?> adapterView) {
             BluetoothDeviceSelector.BluetoothDeviceContainer.bluetoothDevice = null;
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.service_select_device);
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        run();
-    }
-
-    private void run() {
-        final BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        if(!defaultAdapter.isEnabled())
-        {
-            if (askedToEnable){
-                notifyContainer();
-                return;
-            }
-            askedToEnable = true;
-            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBluetooth,RESULT_CODE_ENABLE_BLUETOOTH);
-        }
-
-        final Set<BluetoothDevice> bondedDevices = defaultAdapter.getBondedDevices();
-        Spinner deviceSpinner = (Spinner) findViewById(R.id.deviceSpinner);
-        BluetoothDevice[] bondedDeviceArray = new BluetoothDevice[0];
-        bondedDeviceArray = bondedDevices.toArray(bondedDeviceArray);
-        bondedDeviceAdapter = new BondedDeviceAdapter(this,bondedDeviceArray);
-        deviceSpinner.setAdapter(bondedDeviceAdapter);
-        deviceSpinner.setOnItemSelectedListener(deviceSpinnerItemSelectedListener);
-    }
-
-    @Override
-    protected void onDestroy() {
-        notifyContainer();
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RESULT_CODE_ENABLE_BLUETOOTH){
-            run();
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 }
