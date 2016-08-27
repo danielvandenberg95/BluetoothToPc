@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -29,6 +30,7 @@ class AcceptThread extends Thread {
     private StreamConnectionNotifier server = null;
     private final Keyboard keyboard;
     private boolean running = true;
+    private final static Random random = new Random();
     private final Set<WeakReference<ConnectionHandler>> connectionHandlers = new HashSet<>();
 
     public AcceptThread() {
@@ -91,8 +93,11 @@ class AcceptThread extends Thread {
         private final Timer timer = new Timer();
         private boolean stopping = false;
         private InputStream din;
+        private final int connectionId;
+        private TimerTask timerTask;
 
         public ConnectionHandler(StreamConnection streamConnection) {
+            connectionId = random.nextInt();
             try {
                 din = (streamConnection.openInputStream());
             } catch (IOException e) {
@@ -100,6 +105,7 @@ class AcceptThread extends Thread {
                 stopping = true;
             }
             reschedule();
+            System.out.println("["+connectionId+"] Started connection");
         }
 
         public void run() {
@@ -107,17 +113,18 @@ class AcceptThread extends Thread {
                 while (running && !stopping)
                 {
                     StringBuilder cmd = new StringBuilder();
-                    System.out.println("Receiving...");
+                    System.out.println("["+connectionId+"] Waiting for text to be sent...");
                     char tmpChar;
                     while (((tmpChar = (char) din.read()) > 0) && (tmpChar != '\n') && (tmpChar != '\4')) {
                         cmd.append(tmpChar);
                     }
                     if (tmpChar == '\4'){
-                        System.out.println("Connection closed.");
+                        System.out.println("["+connectionId+"] Connection closed.");
+                        stopTimerTask();
                         return;
                     }
                     String command = cmd.toString();
-                    System.out.println("Received " + command);
+                    System.out.println("["+connectionId+"] Received a stream of text.");
                     reschedule();
                     keyboard.type(command);
                 }
@@ -126,12 +133,18 @@ class AcceptThread extends Thread {
             }
         }
 
+        private void stopTimerTask() {
+            if (timerTask != null){
+                timerTask.cancel();
+            }
+        }
+
         private void reschedule() {
-            timer.purge();
-            timer.schedule(new TimerTask() {
+            stopTimerTask();
+            timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    System.out.println("Stopping connection...");
+                    System.out.println("[" + connectionId + "] Connection timed out.");
                     stopping = true;
                     try {
                         din.close();
@@ -139,7 +152,8 @@ class AcceptThread extends Thread {
                         e.printStackTrace();
                     }
                 }
-            },10000);
+            };
+            timer.schedule(timerTask,10000);
         }
     }
 }

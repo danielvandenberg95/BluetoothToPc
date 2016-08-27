@@ -72,6 +72,7 @@ class Keyboard { // http://stackoverflow.com/a/39141846/4330555
     }
 
     public void type(CharSequence characters) {
+        System.out.println("Typing a stream of text.");
         int length = characters.length();
         for (int i = 0; i < length; i++) {
             char character = characters.charAt(i);

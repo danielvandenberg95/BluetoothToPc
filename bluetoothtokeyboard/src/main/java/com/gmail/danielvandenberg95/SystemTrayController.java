@@ -33,7 +33,7 @@ class SystemTrayController extends Thread {
         final PopupMenu popup = new PopupMenu();
         final TrayIcon trayIcon = new TrayIcon(createImage());
 
-        popup.add("Pass");
+        popup.add("BluetoothToKeyboard");
         MenuItem menuItem = new MenuItem("Quit");
         menuItem.addActionListener(actionEvent -> {
             acceptThread.exit();

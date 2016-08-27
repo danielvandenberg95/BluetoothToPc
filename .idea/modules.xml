@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/BluetoothHIDTest.iml" filepath="$PROJECT_DIR$/BluetoothHIDTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/bluetoothtokeyboard/bluetoothtokeyboard.iml" filepath="$PROJECT_DIR$/bluetoothtokeyboard/bluetoothtokeyboard.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bluetoothtokeyboard/comtokeyboard.iml" filepath="$PROJECT_DIR$/bluetoothtokeyboard/comtokeyboard.iml" />
     </modules>
   </component>
 </project>
