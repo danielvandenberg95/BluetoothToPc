@@ -65,7 +65,7 @@ public class ShareActivity extends Activity {
         textToSend = getIntent().getStringExtra(Intent.EXTRA_TEXT);
     }
 
-    public void doBindService() {
+    private void doBindService() {
         Intent intent = new Intent(this, BluetoothService.class);
         bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
     }

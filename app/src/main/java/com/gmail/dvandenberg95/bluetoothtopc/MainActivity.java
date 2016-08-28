@@ -81,18 +81,18 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private void error(final String s) {
+    private void showAlertDialog(final String string) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                new AlertDialog.Builder(MainActivity.this).setTitle(s).show();
+                new AlertDialog.Builder(MainActivity.this).setTitle(string).show();
             }
         });
     }
 
-    public void serviceTest(View view) {
+    public void serviceTest(@SuppressWarnings("UnusedParameters") View view) {
         if (myServiceBinder == null) {
-            error("Service not bound…");
+            showAlertDialog("Service not bound…");
             return;
         }
         myServiceBinder.sendString("Test string");

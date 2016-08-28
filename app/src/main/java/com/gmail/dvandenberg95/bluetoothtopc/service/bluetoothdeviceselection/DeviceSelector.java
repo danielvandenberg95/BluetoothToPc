@@ -52,7 +52,7 @@ public class DeviceSelector extends Activity {
     private BondedDeviceAdapter bondedDeviceAdapter;
     private boolean askedToEnable = false;
 
-    public void connect(View view) {
+    public void connect(@SuppressWarnings("UnusedParameters") View view) {
         notifyContainer();
         finish();
     }
