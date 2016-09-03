@@ -27,6 +27,7 @@
     package="com.gmail.dvandenberg95.bluetoothtopc">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="false"
@@ -35,27 +36,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.gmail.dvandenberg95.bluetoothtopc.MainActivity">
+        <activity
+            android:name="com.gmail.dvandenberg95.bluetoothtopc.MainActivity"
+            android:excludeFromRecents="false" />
+        <activity
+            android:name="com.gmail.dvandenberg95.bluetoothtopc.service.bluetoothdeviceselection.DeviceSelector"
+            android:excludeFromRecents="true"
+            android:theme="@style/DialogTheme" />
+
+        <service
+            android:name="com.gmail.dvandenberg95.bluetoothtopc.service.BluetoothService"
+            android:exported="true"
+            tools:ignore="ExportedService" />
+
+        <activity
+            android:name="com.gmail.dvandenberg95.bluetoothtopc.ShareActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/Invisible">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name="com.gmail.dvandenberg95.bluetoothtopc.service.bluetoothdeviceselection.DeviceSelector"
-            android:excludeFromRecents="true"
-            android:theme="@style/DialogTheme" />
-        <service android:name="com.gmail.dvandenberg95.bluetoothtopc.service.BluetoothService"
-            android:exported="true"
-            tools:ignore="ExportedService">
-        </service>
-        <activity android:name="com.gmail.dvandenberg95.bluetoothtopc.ShareActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/Invisible">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/plain"/>
             </intent-filter>
         </activity>
     </application>

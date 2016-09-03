@@ -26,4 +26,4 @@ def droneio = System.getenv("droneio") ? "1" : "0"
 if (!droneio.equalsIgnoreCase("1")) {
     include ':app'
 }
-include ':bluetoothtokeyboard'
+include ':bluetoothtokeyboard', ':RunOnStartup'

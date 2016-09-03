@@ -23,8 +23,18 @@
   -->
 
 <resources>
-    <string name="app_name">Bluetooth2PC</string>
+    <string name="app_name" translatable="false">Bluetooth2PC</string>
     <string name="choose_a_bluetooth_device">Choose a Bluetooth device</string>
     <string name="connect">Connect</string>
-    <string name="service_test">Service test</string>
+    <string name="service_test">Send some text to your PC as a test.</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="show_app_in_launcher">Show app in launcher</string>
+    <string name="disable_bluetooth">Automatically disable Bluetooth</string>
+    <string name="enable_bluetooth">Automatically enable Bluetooth</string>
+    <string name="bluetooth_startup_delay_warning">Bluetooth takes a while to start up. If you use this app in relatively quick succession, you might want to consider turning this off.</string>
+    <string name="visibility_changed_on_device_restart">The visibility of the app in the launcher might not update until this device restarts.</string>
+    <string name="settings_can_be_found_in_device_picker">The settings menu can always be found in the device picker, while sending text.</string>
+    <string name="service_not_bound">Service not bound…</string>
+    <string name="download_server_from">This application requires a server program to be running on your PC. To download the said program, please see https://github.com/danielvandenberg95/BluetoothToKeyboard#downloads (or http://goo.gl/K5Dhnk)</string>
+    <string name="settings">Settings</string>
 </resources>

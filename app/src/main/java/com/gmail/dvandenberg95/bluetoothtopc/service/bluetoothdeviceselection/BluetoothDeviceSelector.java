@@ -36,11 +36,11 @@ public class BluetoothDeviceSelector {
     private final Object synchronisation = new Object();
 
     public BluetoothDevice getBluetoothDevice(Context context) {
-        if (BluetoothDeviceContainer.bluetoothDevice != null){
+        if (BluetoothDeviceContainer.bluetoothDevice != null) {
             return BluetoothDeviceContainer.bluetoothDevice;
         }
         synchronized (synchronisation) {
-            if (BluetoothDeviceContainer.bluetoothDevice != null){
+            if (BluetoothDeviceContainer.bluetoothDevice != null) {
                 return BluetoothDeviceContainer.bluetoothDevice;
             }
 
@@ -57,7 +57,7 @@ public class BluetoothDeviceSelector {
     }
 
     private void findBluetoothDevice(Context context) {
-        Intent intent = new Intent(context,DeviceSelector.class);
+        Intent intent = new Intent(context, DeviceSelector.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }

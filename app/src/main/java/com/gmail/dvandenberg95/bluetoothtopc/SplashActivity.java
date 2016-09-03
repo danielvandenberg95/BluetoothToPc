@@ -22,31 +22,22 @@
  * software.
  */
 
-apply plugin: 'java'
+package com.gmail.dvandenberg95.bluetoothtopc;
 
-dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':RunOnStartup')
-}
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
-jar {
-
-    archiveName = "BluetoothToKeyboard.jar"
-
-    from {
-
-        configurations.runtime.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
+/**
+ * Created by Daniel on 29/8/2016.
+ */
+public class SplashActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
-
-    manifest {
-        attributes 'Main-Class': 'com.gmail.danielvandenberg95.BluetoothToKeyboard'
-    }
-
-    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
 }

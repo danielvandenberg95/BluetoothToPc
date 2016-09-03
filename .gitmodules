@@ -1,0 +1,3 @@
+[submodule "RunOnStartup"]
+	path = RunOnStartup
+	url = git@github.com:danielvandenberg95/RunOnStartup.git

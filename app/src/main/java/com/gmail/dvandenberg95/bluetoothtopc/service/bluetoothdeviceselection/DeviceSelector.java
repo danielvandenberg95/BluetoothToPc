@@ -27,9 +27,13 @@ package com.gmail.dvandenberg95.bluetoothtopc.service.bluetoothdeviceselection;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,6 +41,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.gmail.dvandenberg95.bluetoothtopc.MainActivity;
 import com.gmail.dvandenberg95.bluetoothtopc.R;
 
 import java.util.Set;
@@ -51,14 +56,35 @@ public class DeviceSelector extends Activity {
     private final DeviceSpinnerItemSelectedListener deviceSpinnerItemSelectedListener = new DeviceSpinnerItemSelectedListener();
     private BondedDeviceAdapter bondedDeviceAdapter;
     private boolean askedToEnable = false;
+    private SharedPreferences defaultSharedPreferences;
+    private boolean success = false;
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+                        BluetoothAdapter.ERROR);
+                if (state == BluetoothAdapter.STATE_ON) {
+                    run();
+
+                }
+            }
+        }
+    };
 
     public void connect(@SuppressWarnings("UnusedParameters") View view) {
+        success = true;
         notifyContainer();
         finish();
     }
 
     private void notifyContainer() {
         synchronized (BluetoothDeviceSelector.BluetoothDeviceContainer.waitable) {
+            if (!success) {
+                BluetoothDeviceSelector.BluetoothDeviceContainer.bluetoothDevice = null;
+            }
             BluetoothDeviceSelector.BluetoothDeviceContainer.waitable.notifyAll();
         }
     }
@@ -67,6 +93,9 @@ public class DeviceSelector extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.service_select_device);
         super.onCreate(savedInstanceState);
+        defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(mReceiver, filter);
     }
 
     @Override
@@ -80,13 +109,27 @@ public class DeviceSelector extends Activity {
         final BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (!defaultAdapter.isEnabled()) {
-            if (askedToEnable) {
-                notifyContainer();
-                return;
+            if (!defaultSharedPreferences.getBoolean(MainActivity.SHARED_PREFERENCES_AUTO_ENABLE_BLUETOOTH, false)) {
+                if (askedToEnable) {
+                    notifyContainer();
+                    return;
+                }
+                askedToEnable = true;
+                Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBluetooth, RESULT_CODE_ENABLE_BLUETOOTH);
+            } else {
+                defaultAdapter.enable();
+                while (defaultAdapter.getState() == BluetoothAdapter.STATE_TURNING_ON) {
+                    try {
+                        Thread.sleep(5);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (!defaultAdapter.isEnabled()) {
+                    return;
+                }
             }
-            askedToEnable = true;
-            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBluetooth, RESULT_CODE_ENABLE_BLUETOOTH);
         }
 
         final Set<BluetoothDevice> bondedDevices = defaultAdapter.getBondedDevices();
@@ -101,6 +144,7 @@ public class DeviceSelector extends Activity {
     @Override
     protected void onDestroy() {
         notifyContainer();
+        unregisterReceiver(mReceiver);
         super.onDestroy();
     }
 
@@ -111,6 +155,12 @@ public class DeviceSelector extends Activity {
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void openSettings(@SuppressWarnings("UnusedParameters") View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private class BondedDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
