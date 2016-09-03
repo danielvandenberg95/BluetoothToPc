@@ -24,7 +24,10 @@
 
 package com.gmail.danielvandenberg95;
 
+import com.gmail.danielvandenberg95.runonstartup.RunOnStartup;
+
 import java.awt.AWTException;
+import java.awt.CheckboxMenuItem;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -35,6 +38,8 @@ import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.URISyntaxException;
 
 /**
  * Created by Daniel on 25/8/2016.
@@ -72,13 +77,33 @@ class SystemTrayController extends Thread {
         final TrayIcon trayIcon = new TrayIcon(createImage());
 
         popup.add("BluetoothToKeyboard");
-        MenuItem menuItem = new MenuItem("Quit");
-        menuItem.addActionListener(actionEvent -> {
-            acceptThread.exit();
-            systemTray.remove(trayIcon);
-            System.exit(0);
-        });
-        popup.add(menuItem);
+
+        {
+            try {
+                RunOnStartup runOnStartup = new RunOnStartup(new File(SystemTrayController.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()));
+                CheckboxMenuItem menuItem = new CheckboxMenuItem("Run on startup");
+                menuItem.setState(runOnStartup.getRunOnStartup());
+                menuItem.addActionListener(actionEvent -> {
+                    final boolean newValue = !runOnStartup.getRunOnStartup();
+                    runOnStartup.setRunOnStartup(newValue);
+                    menuItem.setState(newValue);
+                });
+                popup.add(menuItem);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+
+        {
+            MenuItem menuItem;
+            menuItem = new MenuItem("Quit");
+            menuItem.addActionListener(actionEvent -> {
+                acceptThread.exit();
+                systemTray.remove(trayIcon);
+                System.exit(0);
+            });
+            popup.add(menuItem);
+        }
 
         trayIcon.setPopupMenu(popup);
         trayIcon.setImageAutoSize(true);
