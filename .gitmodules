@@ -1,0 +1,6 @@
+[submodule "RunOnStartup"]
+	path = RunOnStartup
+	url = git://github.com/danielvandenberg95/RunOnStartup.git
+[submodule "promovideo"]
+	path = promovideo
+	url = git://github.com/danielvandenberg95/BluetoothToPcPromoVideo.git

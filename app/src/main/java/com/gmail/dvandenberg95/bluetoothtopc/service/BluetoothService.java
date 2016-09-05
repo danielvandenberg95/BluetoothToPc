@@ -43,13 +43,17 @@ public class BluetoothService extends Service {
         return BINDER;
     }
 
-    private void sendString(final String string){
+    private void sendString(final String string) {
         bluetoothStringSender.sendString(string, this);
     }
 
     public class BluetoothServiceBinder extends Binder {
-        public void sendString(final String string){
+        public void sendString(final String string) {
             BluetoothService.this.sendString(string);
+        }
+
+        public void sendString(final int textResource) {
+            sendString(getResources().getString(textResource));
         }
     }
 }

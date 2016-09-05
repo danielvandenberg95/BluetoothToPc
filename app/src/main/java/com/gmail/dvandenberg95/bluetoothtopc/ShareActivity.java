@@ -49,7 +49,7 @@ public class ShareActivity extends Activity {
             Log.d("ServiceConnection", "connected");
             myServiceBinder.sendString(textToSend);
             textToSend = null;
-            Toast.makeText(ShareActivity.this,"Sending text via Bluetooth",Toast.LENGTH_LONG).show();
+            Toast.makeText(ShareActivity.this, "Sending text via Bluetooth", Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -65,7 +65,7 @@ public class ShareActivity extends Activity {
         textToSend = getIntent().getStringExtra(Intent.EXTRA_TEXT);
     }
 
-    public void doBindService() {
+    private void doBindService() {
         Intent intent = new Intent(this, BluetoothService.class);
         bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
     }

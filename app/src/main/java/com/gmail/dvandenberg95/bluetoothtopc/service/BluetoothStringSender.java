@@ -24,9 +24,12 @@
 
 package com.gmail.dvandenberg95.bluetoothtopc.service;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.preference.PreferenceManager;
 
+import com.gmail.dvandenberg95.bluetoothtopc.MainActivity;
 import com.gmail.dvandenberg95.bluetoothtopc.service.bluetoothdeviceselection.BluetoothDeviceSelector;
 
 import java.io.IOException;
@@ -42,6 +45,12 @@ class BluetoothStringSender {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                final BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
+
+                if (!defaultAdapter.isEnabled()) {
+                    BluetoothDeviceSelector.BluetoothDeviceContainer.bluetoothDevice = null;
+                    selectedBluetoothDevice = null;
+                }
                 if (selectedBluetoothDevice == null) {
                     scan(context);
                 }
@@ -64,6 +73,10 @@ class BluetoothStringSender {
                     e.printStackTrace();
                 }
                 bluetoothConnection.close();
+
+                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(MainActivity.SHARED_PREFERENCES_AUTO_DISABLE_BLUETOOTH, false)) {
+                    BluetoothAdapter.getDefaultAdapter().disable();
+                }
             }
         }).start();
     }
