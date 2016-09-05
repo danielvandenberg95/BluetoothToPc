@@ -83,7 +83,7 @@ class SystemTrayController extends Thread {
                 RunOnStartup runOnStartup = new RunOnStartup(new File(SystemTrayController.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()));
                 CheckboxMenuItem menuItem = new CheckboxMenuItem("Run on startup");
                 menuItem.setState(runOnStartup.getRunOnStartup());
-                menuItem.addActionListener(actionEvent -> {
+                menuItem.addItemListener(actionEvent -> {
                     final boolean newValue = !runOnStartup.getRunOnStartup();
                     runOnStartup.setRunOnStartup(newValue);
                     menuItem.setState(newValue);

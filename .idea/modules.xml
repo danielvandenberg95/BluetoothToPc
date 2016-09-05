@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BluetoothToKeyboard.iml" filepath="$PROJECT_DIR$/BluetoothToKeyboard.iml" />
-      <module fileurl="file://$PROJECT_DIR$/RunOnStartup/RunOnStartup.iml" filepath="$PROJECT_DIR$/RunOnStartup/RunOnStartup.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BluetoothToPc.iml" filepath="$PROJECT_DIR$/BluetoothToPc.iml" />
       <module fileurl="file://$PROJECT_DIR$/RunOnStartup/RunOnStartup.iml" filepath="$PROJECT_DIR$/RunOnStartup/RunOnStartup.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/bluetoothtokeyboard/bluetoothtokeyboard.iml" filepath="$PROJECT_DIR$/bluetoothtokeyboard/bluetoothtokeyboard.iml" />
