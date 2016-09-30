@@ -2,7 +2,7 @@
 ## Short description
 BluetoothToKeyboard allows you to let your phone send any text to your PC.
 ## Downloads
-Jar-file for PC-side: [drone.io/github.com/danielvandenberg95/…/BluetoothToKeyboard.jar](https://drone.io/github.com/danielvandenberg95/BluetoothToKeyboard/files/bluetoothtokeyboard/build/libs/BluetoothToKeyboard.jar)
+Jar-file for PC-side: [drone.io/github.com/danielvandenberg95/…/BluetoothToKeyboard.jar](https://drone.io/github.com/danielvandenberg95/BluetoothToPc/files/bluetoothtokeyboard/build/libs/BluetoothToKeyboard.jar)
 
 Android Application: [Google Play](https://play.google.com/store/apps/details?id=com.gmail.dvandenberg95.bluetoothtopc)
  - The Android Application is currently in Beta release. To opt in, use [this](https://play.google.com/apps/testing/com.gmail.dvandenberg95.bluetoothtopc) link.
