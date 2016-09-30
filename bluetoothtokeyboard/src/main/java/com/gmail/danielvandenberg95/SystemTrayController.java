@@ -89,7 +89,7 @@ class SystemTrayController extends Thread {
                     menuItem.setState(newValue);
                 });
                 popup.add(menuItem);
-            } catch (URISyntaxException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
