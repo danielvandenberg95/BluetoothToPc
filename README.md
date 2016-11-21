@@ -8,7 +8,7 @@ Android Application: [Google Play](https://play.google.com/store/apps/details?id
  - The Android Application is currently in Beta release. To opt in, use [this](https://play.google.com/apps/testing/com.gmail.dvandenberg95.bluetoothtopc) link.
 
 ## Long description
-BluetoothToKeyboard allows you to let your phone send any text to your PC. The PC-side application will then type it onto your screen. This app requires the program found at https://drone.io/github.com/danielvandenberg95/BluetoothToKeyboard/files/bluetoothtokeyboard/build/libs/BluetoothToKeyboard.jar to be running on the target-PC.
+BluetoothToKeyboard allows you to let your phone send any text to your PC. The PC-side application will then type it onto your screen. This app requires the program found at https://drone.io/github.com/danielvandenberg95/BluetoothToPc/files/bluetoothtokeyboard/build/libs/BluetoothToKeyboard.jar to be running on the target-PC.
 ## Todo
  - Graphics
   - App icon
